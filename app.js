@@ -3,7 +3,7 @@ var exphbs  = require('express-handlebars');
 var port = process.env.PORT || 3000
 var app = express();
 
-const host = "https://jeff-mendoz-mp-commerce-nodejs.herokuapp.com/";
+const host = "https://jeff-mendoz-mp-commerce-nodejs.herokuapp.com";
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
