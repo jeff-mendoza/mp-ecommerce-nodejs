@@ -64,7 +64,7 @@ app.get('/detail', function (req, res) {
                 "id": "atm"
             }
         ],
-        "installments": 6,
+        "installments": 1,
         "default_installments": 6
     };
 
@@ -107,7 +107,7 @@ app.get('/detail', function (req, res) {
 app.get('/feedback', function(request, response) {
     console.log('::API feedback');
     console.log(request.query);
-    res.render('feedback', {...request.query});
+    response.render('feedback', {...request.query});
 });
 
 app.post('/webhook', function(request, response) {
