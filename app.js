@@ -1,9 +1,9 @@
 var express = require('express');
 var exphbs  = require('express-handlebars');
 var port = process.env.PORT || 3000
-
 var app = express();
- 
+
+const host = "https://jeff-mendoz-mp-commerce-nodejs.herokuapp.com/";
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
@@ -27,9 +27,48 @@ app.get('/', function (req, res) {
 });
 
 app.get('/detail', function (req, res) {
-    const {title, price, unit} = req.query;
+    const {title, price, unit, img} = req.query;
     console.log("::endpoint /detail");
     console.log(req.query);
+
+    const payer = {
+        name: "Lalo",
+        surname: "Landa",
+        email: "test_user_83958037@testuser.com",
+        date_created: new Date().toISOString(),
+        phone: {
+          area_code: "52",
+          number: 5549737300
+        },
+         
+        identification: {
+          type: "DNI",
+          number: "12345678"
+        },
+        
+        address: {
+          street_name: "Insurgentes Sur",
+          street_number: 1602,
+          zip_code: "03940"
+        }
+    };
+
+    const paymentMethod = {
+        "excluded_payment_methods": [
+            {
+                "id": "amex"
+            }
+        ],
+        "excluded_payment_types": [
+            {
+                "id": "atm"
+            }
+        ],
+        "installments": 6,
+        "default_installments": 6
+    };
+
+
     // Crea un objeto de preferencia
     let preference = {
         items: [
@@ -37,14 +76,20 @@ app.get('/detail', function (req, res) {
             title: title,
             unit_price: Number(price),
             quantity: Number(unit),
-            external_reference: 'jefferson.mendoza@mercadolibre.com.co'
+            picture_url: host + "/" + img,
+   		    description: "Dispositivo móvil de Tienda e-commerce",
         }
         ],
         back_urls: {
-			"success": "http://localhost:3000/feedback",
-			"failure": "http://localhost:3000/feedback",
-			"pending": "http://localhost:3000/feedback"
+			"success": host + "/feedback",
+			"failure": host + "/feedback",
+			"pending": host + "/feedback"
 		},
+        payment_methods: paymentMethod,
+        payer: payer,
+        notification_url: host + "/webhook",
+        external_reference: 'jefferson.mendoza@mercadolibre.com.co',
+        integrator_id: 'dev_24c65fb163bf11ea96500242ac130004',
 		auto_return: 'approved',
     };
     
@@ -62,11 +107,13 @@ app.get('/detail', function (req, res) {
 app.get('/feedback', function(request, response) {
     console.log('::API feedback');
     console.log(request.query);
-    response.json({
-       Payment: request.query.payment_id,
-       Status: request.query.status,
-       MerchantOrder: request.query.merchant_order_id
-   })
+    res.render('feedback', {...request.query});
+});
+
+app.post('/webhook', function(request, response) {
+    console.log('::API webhook');
+    console.log(request)
+    response.json({Status: 'OK'});
 });
 
 app.listen(port);
