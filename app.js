@@ -1,5 +1,6 @@
 var express = require('express');
 var exphbs  = require('express-handlebars');
+const bodyParser = require('body-parser');
 var port = process.env.PORT || 3000
 var app = express();
 
@@ -10,6 +11,7 @@ app.set('view engine', 'handlebars');
 app.use(express.static('assets'));
  
 app.use('/assets', express.static(__dirname + '/assets'));
+app.use(bodyParser.json())
 
 //config mercadopago
           
@@ -93,6 +95,8 @@ app.get('/detail', function (req, res) {
 		auto_return: 'approved',
     };
     
+    console.log('::request body: create preference ');
+    console.log(preference);
     return mercadopago.preferences.create(preference)
         .then(function(response){
             console.log('::api request: create preference');
@@ -112,7 +116,7 @@ app.get('/feedback', function(request, response) {
 
 app.post('/webhook', function(request, response) {
     console.log('::API webhook');
-    console.log(request)
+    console.log(request.body);
     response.json({Status: 'OK'});
 });
 
