@@ -66,8 +66,7 @@ app.get('/detail', function (req, res) {
                 "id": "atm"
             }
         ],
-        "installments": 1,
-        "default_installments": 6
+        "installments": 6,
     };
 
 
@@ -75,6 +74,7 @@ app.get('/detail', function (req, res) {
     let preference = {
         items: [
         {
+            id: "1234",
             title: title,
             unit_price: Number(price),
             quantity: Number(unit),
