@@ -84,12 +84,36 @@
                                     {{ unit }}
                                 </h3>
                             </div>
-                            <button type="submit" class="mercadopago-button" formmethod="post">Pagar</button>
+                            <button type="submit" class="mercadopago-button" formmethod="post">
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <input id="preferenceId" hidden value="{{id}}"/>
+
+    <script src="https://www.mercadopago.com/v2/security.js" view="item"></script>
+
+    <script>
+        const preferenceId = document.getElementById("preferenceId").value;
+        console.log(preferenceId);
+        // Agrega credenciales de SDK
+        const mp = new MercadoPago('APP_USR-a98b17ae-47a6-4a35-b92d-01919002b97e', {
+                locale: 'es-CO'
+        });
+
+        // Inicializa el checkout
+        mp.checkout({
+            preference: {
+                id: preferenceId
+            },
+            render: {
+                    container: '.mercadopago-button', // Indica dónde se mostrará el botón de pago
+                    label: 'Pagar la compra', // Cambia el texto del botón de pago (opcional)
+            }
+        });
+        </script>
 </div>
    
